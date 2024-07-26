@@ -1,0 +1,22 @@
+{
+  "name": "notifylog",
+  "version": "2.0.0",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsup index.ts",
+    "lint": "eslint src/",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "tsup": "^6.6.3"
+  }
+}
