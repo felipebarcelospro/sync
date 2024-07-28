@@ -54,7 +54,7 @@ const getData = async () => {
         title: dict.dashboard.onboarding.sections.main.steps.third.title,
         description:
           dict.dashboard.onboarding.sections.main.steps.third.description,
-        finished: session.tenant.subscription.currentPlan.name !== 'Free',
+        finished: true,
         href: '/app/settings/billing',
       },
     ],

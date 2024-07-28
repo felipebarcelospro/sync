@@ -13,7 +13,7 @@ datasource db {
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(uuid())
   userId            String
   type              String
   provider          String
@@ -32,7 +32,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -72,14 +72,22 @@ model VerificationToken {
 }
 
 enum MembershipRole {
-  owner
-  member
+  OWNER
+  MEMBER
+  CUSTOMER
 }
 
 model Membership {
   id String @id @default(uuid())
 
-  role MembershipRole
+  role     MembershipRole
+  settings Json?          @default("{}")
+
+  contracts        Contract[]
+  disputes         Dispute[]
+  publications     Publication[]
+  sentMessages     Message[]     @relation("MessageSender")
+  receivedMessages Message[]     @relation("MessageReceiver")
 
   tenantId String
   tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
@@ -100,13 +108,14 @@ model Tenant {
   logo String?
   slug String  @unique
 
-  memberships   Membership[]
-  invites       Invite[]
-  subscriptions Subscription[]
+  memberships  Membership[]
+  invites      Invite[]
+  contracts    Contract[]
+  disputes     Dispute[]
+  transactions Transaction[]
+  publications Publication[]
 
-  settings Json
-
-  paymentProviderId String?
+  settings Json? @default("{}")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -122,85 +131,177 @@ model Invite {
   tenantId String
   tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   expiresAt  DateTime
   acceptedAt DateTime?
 
   @@unique([tenantId, email])
 }
 
-model Plan {
-  id                String  @id @default(uuid())
-  name              String
-  description       String?
-  active            Boolean @default(true)
-  paymentProviderId String  @unique
-
-  prices PlanPrice[]
-
-  metadata Json?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum PublicationStatus {
+  DRAFT
+  PENDING_CLIENT_APPROVAL
+  CLIENT_APPROVED
+  CONTRACT_SIGNED
+  PAYMENT_RECEIVED
+  IN_PROGRESS
+  COMPLETED
+  PENDING_FINAL_APPROVAL
+  DISPUTED
+  CLOSED
 }
 
-enum PlanPriceInterval {
-  day
-  week
-  month
-  year
-}
+model Publication {
+  id     String            @id @default(uuid())
+  status PublicationStatus @default(DRAFT)
 
-enum PlanPriceType {
-  one_time
-  recurring
-}
+  details Json? @default("{}")
 
-model PlanPrice {
-  id              String            @id @default(uuid())
-  price           Int // Assuming price is in the smallest currency unit (e.g., cents)
-  currency        String
-  active          Boolean           @default(true)
-  interval        PlanPriceInterval @default(month)
-  intervalCount   Int?
-  trialPeriodDays Int?
-  type            PlanPriceType     @default(recurring)
-  subscriptions   Subscription[]
-
-  paymentProviderId String @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  planId String
-  plan   Plan   @relation(fields: [planId], references: [id], onDelete: Cascade)
-}
-
-model Subscription {
-  id String @id @default(uuid())
-
-  paymentProviderId String? @unique // Campo adicionado para armazenar o ID da assinatura do Stripe
-
-  status String // Campo adicionado para armazenar o status da assinatura
+  messages     Message[]
+  transactions Transaction[]
 
   tenantId String
-  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
 
-  priceId String
-  price   PlanPrice @relation(fields: [priceId], references: [id], onDelete: Cascade)
+  customerId String
+  customer   Membership @relation(fields: [customerId], references: [id])
+
+  disputeId String?  @unique
+  dispute   Dispute?
+
+  contractId String?   @unique
+  contract   Contract?
+
+  reviewId String? @unique
+  review   Review?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  endedAt   DateTime?
+  startDate DateTime?
+  endDate   DateTime?
+}
 
-  trialStart DateTime?
-  trialEnd   DateTime?
+enum DisputeStatus {
+  OPEN
+  RESOLVED_FAVOR_CLIENT
+  RESOLVED_FAVOR_INFLUENCER
+  CLOSED
+}
 
-  cancelAtPeriodEnd Boolean?
-  cancelAt          DateTime?
-  canceledAt        DateTime?
+model Dispute {
+  id String @id @default(uuid())
 
-  currentPeriodStart DateTime?
-  currentPeriodEnd   DateTime?
+  reason      String
+  resolution  String?
+  attachments Json?
+  status      DisputeStatus
+
+  createdById String
+  createdBy   Membership @relation(fields: [createdById], references: [id])
+
+  tenant   Tenant? @relation(fields: [tenantId], references: [id])
+  tenantId String?
+
+  publicationId String?      @unique
+  publication   Publication? @relation(fields: [publicationId], references: [id])
+
+  resolvedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Contract {
+  id             String    @id @default(uuid())
+  content        Json?     @default("{}")
+  url            String?
+  signedByClient Boolean   @default(false)
+  signedDate     DateTime?
+
+  transactions Transaction[]
+
+  publication   Publication @relation(fields: [publicationId], references: [id])
+  publicationId String      @unique
+
+  tenantId String?
+  tenant   Tenant? @relation(fields: [tenantId], references: [id])
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  Membership   Membership? @relation(fields: [membershipId], references: [id])
+  membershipId String?
+}
+
+enum TransactionType {
+  INCOME
+  WITHDRAWAL
+  FEE
+  REFUND
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  BANK_TRANSFER
+  BILLET
+}
+
+model Transaction {
+  id             String            @id @default(uuid())
+  amount         Float
+  type           TransactionType
+  status         TransactionStatus
+  paymentMethod  PaymentMethod?
+  paymentDetails Json?
+
+  description String?
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
+
+  contract   Contract? @relation(fields: [contractId], references: [id])
+  contractId String?
+
+  publicationId String?
+  publication   Publication? @relation(fields: [publicationId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id      String  @id @default(uuid())
+  rating  Int
+  comment String?
+
+  publicationId String?      @unique
+  publication   Publication? @relation(fields: [publicationId], references: [id])
+
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Message {
+  id      String @id @default(uuid())
+  content String
+
+  senderId String?
+  sender   Membership? @relation(fields: [senderId], references: [id], onDelete: SetNull, name: "MessageSender")
+
+  receiverId String
+  receiver   Membership @relation(fields: [receiverId], references: [id], onDelete: Cascade, name: "MessageReceiver")
+
+  publicationId String?
+  publication   Publication? @relation(fields: [publicationId], references: [id])
+
+  createdAt DateTime @default(now())
 }

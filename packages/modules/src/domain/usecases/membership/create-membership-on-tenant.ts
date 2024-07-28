@@ -29,7 +29,7 @@ export class CreateMembershipOnTenantUseCase {
     }
 
     const existingMembership =
-      await this.membershipRepository.getByUserOnTenant(tenantId, userId)
+      await this.membershipRepository.getByUserAndTenant(tenantId, userId)
     if (existingMembership) {
       throw new Error('Membership already exists')
     }

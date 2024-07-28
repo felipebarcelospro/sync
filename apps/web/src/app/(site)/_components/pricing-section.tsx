@@ -10,7 +10,7 @@ import { Suspense } from 'react'
 import { getLocaleFromRequest } from '@/services/internationalization/helpers/get-locale-from-request'
 import { getDictionary } from '@/services/internationalization/helpers/get-dictionary'
 import { cn } from '@design-system/react/helpers/cn'
-import { getPlansAction } from '@/app/app/(settings)/settings/billing/actions'
+import { getPlansAction } from '@/app/app/(dashboard)/actions'
 
 export function PricingSection() {
   const locale = getLocaleFromRequest()

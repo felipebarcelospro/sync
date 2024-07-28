@@ -30,7 +30,7 @@ export class DeleteInvitesUseCase {
       throw new Error('User does not exist')
     }
 
-    const userMembership = await this.membershipRepository.getByUserOnTenant(
+    const userMembership = await this.membershipRepository.getByUserAndTenant(
       userId,
       tenantId,
     )

@@ -9,9 +9,9 @@ import { cn } from '../../../helpers/cn'
 import { Button, ButtonProps } from '../../ui/button'
 
 // DashboardSidebar component
-export function DashboardSidebar({ children }: { children: ReactNode }) {
+export function DashboardSidebar({ children, className }: { children: ReactNode, className?: string }) {
   return (
-    <aside className="hidden max-w-full md:grid grid-cols-[auto_1fr] gap-4">
+    <aside className={cn("hidden max-w-full md:grid grid-cols-[auto_1fr]", className)}>
       {children}
     </aside>
   )
@@ -27,17 +27,19 @@ export function DashboardSidebarToolbar({ children }: { children: ReactNode }) {
 
 export function DashboardSidebarToolbarHeader({
   children,
+  className
 }: {
-  children: ReactNode
+  children: ReactNode,
+  className?: string
 }) {
   return (
-    <div className="flex flex-col justify-center h-10 mb-9">{children}</div>
+    <div className={cn("flex flex-col justify-center h-10 mb-9", className)}>{children}</div>
   )
 }
 
-export function DashboardSidebarMenu({ children }: { children: ReactNode }) {
+export function DashboardSidebarMenu({ children, className }: { children: ReactNode, className?: string }) {
   return (
-    <div className="w-64 border-r z-0  page-transition border-border py-4 pr-4 flex flex-col justify-between animate-fade-up animate-delay-150 animate-once animate-ease-in-out">
+    <div className={cn("w-72 border-r z-0 pl-4 page-transition border-border py-4 pr-4 flex flex-col justify-between animate-fade-up animate-delay-150 animate-once animate-ease-in-out", className)}>
       {children}
     </div>
   )
@@ -45,11 +47,13 @@ export function DashboardSidebarMenu({ children }: { children: ReactNode }) {
 
 export function DashboardSidebarToolbarMenu({
   children,
+  className
 }: {
   children: ReactNode
+  className?: string
 }) {
   return (
-    <div className="flex flex-col items-center space-y-2 flex-1">
+    <div className={cn("flex flex-col items-center space-y-2 flex-1", className)}>
       {children}
     </div>
   )
@@ -60,20 +64,23 @@ export function DashboardSidebarToolbarMenuItem({
   variant,
   children,
   isActive,
+  className
 }: {
   src?: string
   variant?: ButtonProps['variant']
   isActive?: boolean
   children: ReactNode
+  className?: string
 } & ButtonProps) {
   return (
     <Button
       size="icon"
       variant={variant ?? 'outline'}
       className={cn([
-        'overflow-hidden',
+        'overflow-hidden rounded-full',
         isActive && 'bg-secondary',
         src && '!p-0',
+        className
       ])}
     >
       {src ? (
@@ -93,47 +100,53 @@ export function DashboardSidebarToolbarMenuItem({
 
 export function DashboardSidebarToolbarActions({
   children,
+  className
 }: {
-  children: ReactNode
+  children: ReactNode,
+  className?: string
 }) {
   return (
-    <aside className="flex flex-col items-center space-y-2">{children}</aside>
+    <aside className={cn("flex flex-col items-center space-y-2", className)}>{children}</aside>
   )
 }
 
 export function DashboardSidebarToolbarActionsItem({
   icon,
+  className
 }: {
   icon: React.ReactElement
+  className?: string
 }) {
   return (
     <Button size="icon" variant="ghost">
       {React.cloneElement(icon, {
-        className: `w-5 h-5`,
+        className: cn(`w-5 h-5`, className),
       })}
     </Button>
   )
 }
 
 // DashboardSidebarHeader component
-export function DashboardSidebarHeader({ children }: { children: ReactNode }) {
+export function DashboardSidebarHeader({ children, className }: { children: ReactNode, className?: string }) {
   return (
-    <header className="px-4 mb-9 flex items-center justify-between h-10">
+    <header className={cn("px-4 mb-5 flex items-center justify-between h-10", className)}>
       {children}
     </header>
   )
 }
 
-export function DashboardSidebarTitle({ children }: { children: ReactNode }) {
-  return <strong className="text-md">{children}</strong>
+export function DashboardSidebarTitle({ children, className }: { children: ReactNode, className?: string }) {
+  return <strong className={cn("text-md", className)}>{children}</strong>
 }
 
 export function DashboardSidebarHeaderMenu({
   children,
+  className
 }: {
-  children: ReactNode
+  children: ReactNode,
+  className?: string
 }) {
-  return <div className="flex items-center space-x-2">{children}</div>
+  return <div className={cn("flex items-center space-x-2", className)}>{children}</div>
 }
 
 // DashboardSidebarMain component
@@ -168,9 +181,9 @@ export function DashboardSidebarLink({
 }
 
 // DashboardSidebarFooter component
-export function DashboardSidebarFooter({ children }: { children: ReactNode }) {
+export function DashboardSidebarFooter({ children, className }: { children: ReactNode, className?: string }) {
   return (
-    <footer>
+    <footer className={cn("", className)}>
       <section>{children}</section>
     </footer>
   )

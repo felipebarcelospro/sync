@@ -16,28 +16,11 @@ import { DeleteInvitesUseCase } from './domain/usecases/invite/delete-invite'
 import { UpdateTenantUseCase } from './domain/usecases/tenant/update-tenant'
 import { GetTenantUseCase } from './domain/usecases/tenant/get-tenant'
 import { GetMembershipOnTenantUseCase } from './domain/usecases/membership/get-membership-on-tenant'
-import { CreateSubscriptionUseCase } from './domain/usecases/subscriptions/create-subscription'
-import { PrismaSubscriptionRepository } from './infrastructure/prisma/repositories/subscription'
-import { PrismaPlanRepository } from './infrastructure/prisma/repositories/plan'
-import { PrismaPlanPriceRepository } from './infrastructure/prisma/repositories/plan-price'
-import { CancelSubscriptionUseCase } from './domain/usecases/subscriptions/cancel-subscription'
-import { GetFirstSubscriptionOfTenantUseCase } from './domain/usecases/subscriptions/get-first-subscription-of-tenant'
-import { GetSubscriptionByProviderIdUseCase } from './domain/usecases/subscriptions/get-subscription-by-provider-id'
-import { ReactiveSubscriptionUseCase } from './domain/usecases/subscriptions/reactive-subscription'
-import { UpdateSubscriptionUseCase } from './domain/usecases/subscriptions/update-subscription'
-import { GetPlanByIdUseCase } from './domain/usecases/plan/get-plan-by-id'
-import { UpsertPlanUseCase } from './domain/usecases/plan/upsert-plan'
-import { GetPlanPriceByIdUseCase } from './domain/usecases/plan-price/get-plan-price-by-id'
-import { CreatePlanPriceUseCase } from './domain/usecases/plan-price/create-plan-price'
-import { UpdatePlanPriceUseCase } from './domain/usecases/plan-price/update-plan-price'
-import { UpsertPlanPriceUseCase } from './domain/usecases/plan-price/upsert-plan-price'
 import { DOSpacesStorageProvider } from './infrastructure/storage/digital-ocean-spaces'
 import { StripePaymentProvider } from './infrastructure/payment/stripe-payment'
-import { GetPlansUseCase } from './domain/usecases/plan/get-plans'
 import { UpdateUserUseCase } from './domain/usecases/user/update-user'
 import { GetInviteByIdUseCase } from './domain/usecases/invite/get-by-id'
 import { GetUserByIdUseCase } from './domain/usecases/user/get-user'
-import { GetPlanByProviderIdUseCase } from './domain/usecases/plan/get-plan-by-provider-id'
 import { ResendProvider } from './infrastructure/mail/resend-mail'
 import { RegenerateExternalApiToken } from './domain/usecases/tenant/regenerate-external-api-token'
 import { GetTenantByExternalApiTokenUseCase } from './domain/usecases/tenant/get-tenant-by-external-api-token'
@@ -47,9 +30,6 @@ const inviteRepository = new PrismaInviteRepository(db)
 const tenantRepository = new PrismaTenantRepository(db)
 const userRepository = new PrismaUserRepository(db)
 const membershipRepository = new PrismaMembershipRepository(db)
-const subscriptionRepository = new PrismaSubscriptionRepository(db)
-const planRepository = new PrismaPlanRepository(db)
-const planPriceRepository = new PrismaPlanPriceRepository(db)
 
 // PROVIDER
 const mailProvider = new ResendProvider()
@@ -120,9 +100,6 @@ export const modules = {
         userRepository,
         tenantRepository,
         membershipRepository,
-        subscriptionRepository,
-        paymentProvider,
-        planPriceRepository,
       ),
       updateTenant: new UpdateTenantUseCase(
         userRepository,
@@ -137,44 +114,6 @@ export const modules = {
       getTenantByExternalApiToken: new GetTenantByExternalApiTokenUseCase(
         tenantRepository,
       ),
-    },
-    subscription: {
-      createSubscription: new CreateSubscriptionUseCase(
-        subscriptionRepository,
-        tenantRepository,
-        planPriceRepository,
-      ),
-      cancelSubscription: new CancelSubscriptionUseCase(
-        subscriptionRepository,
-        tenantRepository,
-        planPriceRepository,
-      ),
-      getFirstSubscriptionOfTenant: new GetFirstSubscriptionOfTenantUseCase(
-        subscriptionRepository,
-        tenantRepository,
-      ),
-      getSubscriptionByProviderId: new GetSubscriptionByProviderIdUseCase(
-        subscriptionRepository,
-      ),
-      reactiveSubscription: new ReactiveSubscriptionUseCase(
-        subscriptionRepository,
-        tenantRepository,
-        planPriceRepository,
-        planRepository,
-      ),
-      updateSubscription: new UpdateSubscriptionUseCase(subscriptionRepository),
-    },
-    plan: {
-      getPlanById: new GetPlanByIdUseCase(planRepository),
-      getPlanByProviderId: new GetPlanByProviderIdUseCase(planRepository),
-      upsertPlan: new UpsertPlanUseCase(planRepository),
-      getPlans: new GetPlansUseCase(planRepository),
-    },
-    planPrice: {
-      getPlanPriceById: new GetPlanPriceByIdUseCase(planPriceRepository),
-      createPlanPrice: new CreatePlanPriceUseCase(planPriceRepository),
-      updatePlanPrice: new UpdatePlanPriceUseCase(planPriceRepository),
-      upsertPlanPrice: new UpsertPlanPriceUseCase(planPriceRepository),
     },
     user: {
       updateUser: new UpdateUserUseCase(userRepository),

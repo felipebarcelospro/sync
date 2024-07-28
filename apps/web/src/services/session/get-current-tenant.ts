@@ -3,7 +3,6 @@ import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { TenantModel } from '@/types/tenant'
 import { User } from '@app/modules/src/domain/entities/User'
-import { getTenantSubscription } from '../payment/get-tenant-subscription'
 import { isValidUUID } from '@/helpers/is-valid-uuid'
 
 async function fetchTenantData(tenantId: string, userId: string) {
@@ -31,8 +30,7 @@ async function fetchTenantData(tenantId: string, userId: string) {
       return null
     }
 
-    const subscription = await getTenantSubscription(tenantData.id)
-    return { ...tenantData, subscription }
+    return tenantData
   } catch (error) {
     console.error(
       `Error fetching tenant data for tenantId: ${tenantId} and userId: ${userId}`,

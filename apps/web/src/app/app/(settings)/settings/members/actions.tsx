@@ -82,7 +82,7 @@ export const inviteMemberAction = client.action({
       tenant.id,
       {
         email: input.email,
-        role: 'member',
+        role: 'MEMBER',
       },
     )
 

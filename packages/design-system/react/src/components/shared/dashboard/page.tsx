@@ -43,7 +43,7 @@ export function DashboardPageHeaderTitle(
   }>,
 ) {
   const { className, children } = props
-  return <h1 className={cn(['opacity-60 text-md md:text-sm', className])}>{children}</h1>
+  return <h1 className={cn(['opacity-60 text-md md:text-sm font-medium', className])}>{children}</h1>
 }
 
 export function DashboardPageHeaderActions(

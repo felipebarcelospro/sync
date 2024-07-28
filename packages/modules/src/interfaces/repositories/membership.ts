@@ -1,26 +1,29 @@
 import { Membership, MembershipRole } from '../../domain/entities/Membership'
 
 export interface CreateMembershipDTO {
+  role: MembershipRole
+  settings?: Record<string, any>
   tenantId: string
   userId: string
-  role: MembershipRole
 }
 
 export interface UpdateMembershipDTO {
-  role: MembershipRole
+  role?: MembershipRole
+  settings?: Record<string, any>
+  deletedAt?: Date | null
 }
 
 export interface IMembershipRepository {
-  list: (tenantId: string) => Promise<Membership[]>
-  delete: (membershipId: string) => Promise<void>
   create: (data: CreateMembershipDTO) => Promise<Membership>
-  getByUserOnTenant: (
+  getById: (id: string) => Promise<Membership | null>
+  update: (
+    id: string,
+    data: Partial<UpdateMembershipDTO>,
+  ) => Promise<Membership>
+  delete: (id: string) => Promise<void>
+  list: (tenantId: string, role?: MembershipRole) => Promise<Membership[]>
+  getByUserAndTenant: (
     userId: string,
     tenantId: string,
   ) => Promise<Membership | null>
-  getById: (membershipId: string) => Promise<Membership | null>
-  update: (
-    membershipId: string,
-    data: UpdateMembershipDTO,
-  ) => Promise<Membership>
 }

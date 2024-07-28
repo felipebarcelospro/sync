@@ -29,7 +29,7 @@ export class DeleteMembershipOnTenantUseCase {
     }
 
     const currentUserMembership =
-      await this.membershipRepository.getByUserOnTenant(
+      await this.membershipRepository.getByUserAndTenant(
         currentUserId,
         currentTenantId,
       )

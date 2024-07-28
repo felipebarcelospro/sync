@@ -14,15 +14,7 @@ import {
   DashboardSidebarToolbarMenu,
   DashboardSidebarToolbarMenuItem,
 } from '@design-system/react/components/shared/dashboard/sidebar'
-import {
-  ArrowLeft,
-  BlocksIcon,
-  Briefcase,
-  Brush,
-  CreditCard,
-  User,
-  Users,
-} from 'lucide-react'
+import { ArrowLeft, Briefcase, Brush, User, Users } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 export function TeamSettingsSidebar() {
@@ -85,24 +77,6 @@ export function TeamSettingsSidebar() {
               icon={<Users />}
             >
               {dict.dashboard.settings.sidebar.members}
-            </DashboardSidebarLink>
-          </Link>
-
-          <Link href="/app/settings/billing">
-            <DashboardSidebarLink
-              isActive={isActive('/app/settings/billing', true)}
-              icon={<CreditCard />}
-            >
-              {dict.dashboard.settings.sidebar.billing}
-            </DashboardSidebarLink>
-          </Link>
-
-          <Link href="/app/settings/integrations">
-            <DashboardSidebarLink
-              isActive={isActive('/app/settings/integrations', true)}
-              icon={<BlocksIcon />}
-            >
-              {dict.dashboard.settings.sidebar.integrations}
             </DashboardSidebarLink>
           </Link>
         </DashboardSidebarMain>

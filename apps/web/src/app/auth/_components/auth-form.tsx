@@ -65,15 +65,15 @@ export function AuthForm() {
       })
 
       toast({
-        title: 'Email sent',
-        description: `We have sent an email to ${data.email} with a verification code.`,
+        title: 'Email enviado',
+        description: `Enviamos um email para ${data.email} com um código de verificação.`,
       })
     } catch (error) {
       console.log(error)
 
       toast({
-        title: 'Error sending email',
-        description: `An error occurred while sending the email to ${data.email}.`,
+        title: 'Erro ao enviar email',
+        description: `Ocorreu um erro ao enviar o email para ${data.email}.`,
       })
     } finally {
       setIsLoading((prev) => ({ ...prev, email: false }))
@@ -89,17 +89,17 @@ export function AuthForm() {
       <form className="w-full space-y-4 mb-8" onSubmit={handleSubmit}>
         <Input
           variant="outline"
-          placeholder="Your email"
+          placeholder="Seu email"
           className="h-12"
           {...form.register('email')}
         />
 
         <Button size="lg" className="w-full h-12 shadow" variant="default">
           <ButtonIcon className="w-4 h-4 mr-3" isLoading={isLoading.email} />
-          Continue with email
+          Continuar com email
         </Button>
 
-        <SeparatorWithText>or</SeparatorWithText>
+        <SeparatorWithText>ou</SeparatorWithText>
 
         <Button
           type="button"
@@ -113,7 +113,7 @@ export function AuthForm() {
             icon={GoogleIcon}
             isLoading={isLoading.google}
           />
-          Continue with Google
+          Continuar com Google
         </Button>
         <Button
           type="button"
@@ -127,19 +127,19 @@ export function AuthForm() {
             icon={GithubIcon}
             isLoading={isLoading.github}
           />
-          Continue with GitHub
+          Continuar com GitHub
         </Button>
       </form>
 
       <span className="text-sm opacity-60 max-w-[80%]">
-        By signing up, you agree to our <br />
-        terms{' '}
+        Ao se inscrever, você concorda com nossos <br />
+        termos{' '}
         <a
           href={APP_CONFIGS.app.links.terms}
           target="_blank"
           className="underline"
         >
-          <b>Terms of Use</b>
+          <b>Termos de Uso</b>
         </a>
       </span>
     </div>

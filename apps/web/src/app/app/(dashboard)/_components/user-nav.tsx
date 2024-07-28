@@ -42,7 +42,7 @@ export function UserNav() {
               src={session.user.image}
               alt={`@${session.user.username}`}
             />
-            <AvatarFallback>
+            <AvatarFallback className="bg-primary text-primary-foreground">
               {getInitialsFromName(session.user.name)}
             </AvatarFallback>
           </Avatar>

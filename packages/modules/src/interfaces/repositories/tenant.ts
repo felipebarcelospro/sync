@@ -4,7 +4,6 @@ import { ChildPartial } from '../../types/child-partial'
 export interface CreateTenantDTO {
   name: string
   slug: string
-  paymentProviderId: string
   settings: ChildPartial<TenantSettings>
 }
 

@@ -7,7 +7,7 @@ import {
   MobileMenuButton,
   MobileMenuContent,
 } from '@design-system/react/components/shared/dashboard/mobile-menu'
-import { HomeIcon, PlugIcon, Settings2Icon } from 'lucide-react'
+import { BookIcon, HomeIcon, Settings2Icon, Users2Icon } from 'lucide-react'
 import { UserMobileNav } from './user-mobile-nav'
 import { usePathname } from 'next/navigation'
 
@@ -26,9 +26,14 @@ export function MobileNavMenu() {
             <HomeIcon className="w-6 h-6" />
           </Link>
         </MobileMenuButton>
-        <MobileMenuButton isActive={isActive('/app/plugins')}>
-          <Link href="/app/plugins">
-            <PlugIcon className="w-6 h-6" />
+        <MobileMenuButton isActive={isActive('/app/publis')}>
+          <Link href="/app/publis">
+            <BookIcon className="w-6 h-6" />
+          </Link>
+        </MobileMenuButton>
+        <MobileMenuButton isActive={isActive('/app/publis')}>
+          <Link href="/app/publis">
+            <Users2Icon className="w-6 h-6" />
           </Link>
         </MobileMenuButton>
         <MobileMenuButton isActive={isActive('/app/settings')}>

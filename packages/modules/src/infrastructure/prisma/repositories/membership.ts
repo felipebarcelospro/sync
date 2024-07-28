@@ -13,10 +13,11 @@ export class PrismaMembershipRepository implements IMembershipRepository {
     this.prisma = prisma
   }
 
-  async list(tenantId: string): Promise<Membership[]> {
+  async list(tenantId: string, role?: MembershipRole): Promise<Membership[]> {
     const memberships = await this.prisma.membership.findMany({
       where: {
         tenantId,
+        role,
       },
       include: {
         user: true,
@@ -74,7 +75,7 @@ export class PrismaMembershipRepository implements IMembershipRepository {
     return this.mapToDomain(membership)
   }
 
-  async getByUserOnTenant(
+  async getByUserAndTenant(
     userId: string,
     tenantId: string,
   ): Promise<Membership | null> {

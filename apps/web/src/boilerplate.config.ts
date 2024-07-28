@@ -1,9 +1,9 @@
 export const APP_CONFIGS = {
   app: {
     url: process.env.NEXT_PUBLIC_APP_URL || 'http//localhost:3000',
-    name: 'SaaS Boilerplate',
+    name: 'Sync',
     theme: 'light',
-    defaultLanguage: 'en',
+    defaultLanguage: 'pt',
     description: 'Transform Your Project into a Successful Micro-SaaS',
     ogImage: 'https://cdn.nubler.com.br/saas-boilerplate/og-image.png',
     brand: {

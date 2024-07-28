@@ -26,7 +26,7 @@ export class RegenerateExternalApiToken {
       throw new Error('User does not exist')
     }
 
-    const membership = await this.membershipRepository.getByUserOnTenant(
+    const membership = await this.membershipRepository.getByUserAndTenant(
       userId,
       tenantId,
     )

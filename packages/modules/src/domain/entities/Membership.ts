@@ -1,27 +1,24 @@
-export type MembershipRole = 'owner' | 'member'
+import type { Tenant } from './Tenant'
+import type { User } from './User'
+
+export type MembershipRole = 'OWNER' | 'MEMBER' | 'CUSTOMER'
 
 export interface Membership {
   id: string
-  userId: string
-  tenantId: string
   role: MembershipRole
+  settings?: Record<string, any>
 
-  user?: {
-    id: string
-    name: string
-    email: string
-    username: string
-    image?: string
-  }
+  tenantId: string
+  tenant: Tenant
 
-  tenant?: {
-    id: string
-    name: string
-    slug: string
-    logo?: string
-  }
+  userId: string
+  user: User
 
   createdAt: Date
   updatedAt: Date
   deletedAt?: Date
+
+  _count?: {
+    publications: number
+  }
 }

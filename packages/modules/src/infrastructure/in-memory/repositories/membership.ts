@@ -61,7 +61,7 @@ export class InMemoryMembershipRepository implements IMembershipRepository {
     return membership
   }
 
-  async getByUserOnTenant(
+  async getByUserAndTenant(
     userId: string,
     tenantId: string,
   ): Promise<Membership> {

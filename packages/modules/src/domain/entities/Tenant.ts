@@ -24,11 +24,9 @@ export interface TenantSettings {
 export interface Tenant {
   id: string
   name: string
-  slug: string
   logo?: string
-  settings: TenantSettings
-
-  paymentProviderId?: string
+  slug: string
+  settings?: Record<string, any>
 
   createdAt: Date
   updatedAt: Date

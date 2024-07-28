@@ -1,7 +1,7 @@
 import { IMembershipRepository } from '../../../interfaces/repositories/membership'
 import { ITenantRepository } from '../../../interfaces/repositories/tenant'
 import { IUserRepository } from '../../../interfaces/repositories/user'
-import { Membership } from '../../entities/Membership'
+import { Membership, type MembershipRole } from '../../entities/Membership'
 
 export class ListMembershipsOnTenantUseCase {
   constructor(
@@ -13,9 +13,11 @@ export class ListMembershipsOnTenantUseCase {
   async execute({
     tenantId,
     userId,
+    role,
   }: {
     tenantId: string
     userId: string
+    role?: MembershipRole
   }): Promise<Membership[]> {
     const tenant = await this.tenantRepository.getById(tenantId)
     if (!tenant) {
@@ -28,13 +30,12 @@ export class ListMembershipsOnTenantUseCase {
     }
 
     const existingMembership =
-      await this.membershipRepository.getByUserOnTenant(userId, tenantId)
+      await this.membershipRepository.getByUserAndTenant(userId, tenantId)
     if (!existingMembership) {
       throw new Error('User dont has a membership')
     }
 
-    const memberships = await this.membershipRepository.list(tenantId)
-
+    const memberships = await this.membershipRepository.list(tenantId, role)
     return memberships
   }
 }

@@ -30,7 +30,7 @@ export class GetTenantUseCase {
       throw new Error('User not found')
     }
 
-    const membership = await this.membershipRepository.getByUserOnTenant(
+    const membership = await this.membershipRepository.getByUserAndTenant(
       userId,
       tenantId,
     )

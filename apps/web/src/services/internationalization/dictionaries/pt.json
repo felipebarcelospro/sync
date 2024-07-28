@@ -84,9 +84,9 @@
         "dashboard": {
           "title": "Painel",
           "items": {
-            "onboarding": "Onboarding",
-            "home": "Início",
-            "plugins": "Plugins",
+            "onboarding": "Primeiros passos",
+            "home": "Dashboard",
+            "plugins": "Integrações",
             "settings": "Configurações"
           }
         },

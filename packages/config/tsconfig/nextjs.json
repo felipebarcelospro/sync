@@ -20,6 +20,7 @@
       "@/*": ["./src/*"],
       "@design-system/react/components/ui/*": ["../../packages/design-system/react/src/components/ui/*"],
       "@design-system/react/components/shared/*": ["../../packages/design-system/react/src/components/shared/*"],
+      "@design-system/react/components/tremor": ["../../packages/design-system/react/src/components/tremor"],
       "@design-system/react/hooks/*": ["../../packages/design-system/react/src/hooks/*"],
       "@design-system/react/helpers/*": ["../../packages/design-system/react/src/helpers/*"],
       "@design-system/react/style.scss": ["../../packages/design-system/react/src/style.scss"],
